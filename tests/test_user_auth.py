@@ -10,7 +10,7 @@ class TestUserAuth(BaseCase):
         ("no_cookie"),
         ("no_token")
     ]
-    def setap(self):
+    def setup(self):
         data = {
             'email': 'vinkotov@example.com',
             'password': '1234'
@@ -19,7 +19,7 @@ class TestUserAuth(BaseCase):
 
         self.auth_sid = self.get_cooke(response1, "auth_sid")
         self.token = self.get_header(response1, "x-csrf-token")
-        self.user_id_from_auth_method = self.get_json_value(response1,"user_id")
+        self.user_id_from_auth_method = self.get_json_value(response1, "user_id")
 
     def test_auth_user(self):
         response2 = requests.get("https://playground.learnqa.ru/api/user/auth",
