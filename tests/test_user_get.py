@@ -1,9 +1,10 @@
+import allure
 import requests
 
 from lib.assertions import Assertions
 from lib.base_case import BaseCase
 
-
+@allure.epic('Get cases')
 class TestUserGet(BaseCase):
     def test_get_user_details_as_someone_user(self):
         data = {

@@ -1,10 +1,12 @@
+import allure
 import pytest
 import requests
 
 from lib.base_case import BaseCase
 
-
+@allure.epic('Register cases')
 class TestUserRegister(BaseCase):
+    @allure.description('This test trying create_user')
     def test_create_user_with_existing_email(self):
         email = 'vinkotov@example.com'
         data = {
@@ -19,6 +21,7 @@ class TestUserRegister(BaseCase):
         assert response.status_code == 400, f"Ошибка {response.status_code}"
         assert response.content.decode("utf-8") == f"Users with email '{email}' already exists", f"Ошибка {response.content}"
 
+    @allure.description('This test trying create_user')
     def test_create_user_with_uncorrect_email(self):
         email = 'vinkotovexample.com'
         data = {
@@ -57,6 +60,7 @@ class TestUserRegister(BaseCase):
         assert response.content.decode(
             "utf-8") == f"{statys}", f"Ошибка {response.content}"
 
+    @allure.description('This test trying create_user')
     def test_create_user_with_name_1_simvol(self):
         email = 'vinkoto@vexample.com'
         data = {
@@ -72,14 +76,12 @@ class TestUserRegister(BaseCase):
         assert response.content.decode(
             "utf-8") == f"The value of 'firstName' field is too short", f"Ошибка {response.content}"
 
+    @allure.description('This test trying create_user')
     def test_create_user_with_name_ore_255_simvol(self):
         email = 'vinkoto@vexample.com'
         data = {
             'password': '1234',
-            'username': 'learnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqle'
-                        'arnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearn'
-                        'qlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqle'
-                        'arnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnqlearnq',
+            'username': 'learnq'*50,
             'firstName': 'l',
             'lastName': 'learnqa',
             'email': email
