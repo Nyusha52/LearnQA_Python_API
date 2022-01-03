@@ -2,7 +2,10 @@ import allure
 import pytest
 import requests
 
+from lib.assertions import Assertions
 from lib.base_case import BaseCase
+from lib.my_requests import MyRequests
+
 
 @allure.epic('Register cases')
 class TestUserRegister(BaseCase):
@@ -22,7 +25,7 @@ class TestUserRegister(BaseCase):
         assert response.content.decode("utf-8") == f"Users with email '{email}' already exists", f"Ошибка {response.content}"
 
     @allure.description('This test trying create_user')
-    def test_create_user_with_uncorrect_email(self):
+    def test_create_user_with_incorrect_email(self):
         email = 'vinkotovexample.com'
         data = {
             'password': '1234',
@@ -39,11 +42,11 @@ class TestUserRegister(BaseCase):
 
     @pytest.mark.parametrize(
         'password, username, firstName, lastName, email, statys', [
-            ['','learnqa', 'learnqa', 'learnqa', 'vinkotov1@example.com', "The value of 'password' field is too short"],
-            ['1234','', 'learnqa', 'learnqa', 'vinkotov1@example.com', "The value of 'username' field is too short"],
-            ['1234','learnqa', '', 'learnqa', 'vinkotov1@example.com', "The value of 'firstName' field is too short"],
-            ['1234','learnqa', 'learnqa', '', 'vinkotov1@example.com', "The value of 'lastName' field is too short"],
-            ['1234','learnqa', 'learnqa', 'learnqa', '', "The value of 'email' field is too short"],
+            [None,'learnqa', 'learnqa', 'learnqa', BaseCase().prepare_registration_data(), "The following required params are missed: password"],
+            ['1234',None, 'learnqa', 'learnqa', BaseCase().prepare_registration_data(), "The following required params are missed: username"],
+            ['1234','learnqa', None, 'learnqa', BaseCase().prepare_registration_data(), "The following required params are missed: firstName"],
+            ['1234','learnqa', 'learnqa', None, BaseCase().prepare_registration_data(), "The following required params are missed: lastName"],
+            ['1234','learnqa', 'learnqa', 'learnqa', None, "The following required params are missed: email"],
         ],
     )
     def test_create_user_without_field(self, password, username, firstName, lastName, email, statys):
@@ -61,8 +64,8 @@ class TestUserRegister(BaseCase):
             "utf-8") == f"{statys}", f"Ошибка {response.content}"
 
     @allure.description('This test trying create_user')
-    def test_create_user_with_name_1_simvol(self):
-        email = 'vinkoto@vexample.com'
+    def test_create_user_with_name_one_symbol(self):
+        email = self.prepare_registration_data()
         data = {
             'password': '1234',
             'username': 'learnqa',
@@ -77,8 +80,8 @@ class TestUserRegister(BaseCase):
             "utf-8") == f"The value of 'firstName' field is too short", f"Ошибка {response.content}"
 
     @allure.description('This test trying create_user')
-    def test_create_user_with_name_ore_255_simvol(self):
-        email = 'vinkoto@vexample.com'
+    def test_create_user_with_name_more_255_symbol(self):
+        email = self.prepare_registration_data()
         data = {
             'password': '1234',
             'username': 'learnq'*50,
