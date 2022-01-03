@@ -65,10 +65,6 @@ class TestUserEdit(BaseCase):
     @allure.description("Confirm it is prohibited to edit user w/o authorization")
     @pytest.mark.parametrize('param', user_params)
     def test_edit_user_not_auth(self, param):
-        """
-        put request to change user w/o authorization
-        """
-        edit_param = param
         new_value = "anything"
 
         response = MyRequests.put('/user/2', data={param: new_value})
