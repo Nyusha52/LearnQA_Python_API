@@ -23,6 +23,7 @@ class TestUserAuth(BaseCase):
         self.user_id_from_auth_method = self.get_json_value(response1, "user_id")
 
     @allure.description('This test try to auth user')
+    @allure.severity(allure.severity_level.BLOCKER)
     def test_auth_user(self):
         response2 = requests.get("https://playground.learnqa.ru/api/user/auth",
                                  headers={"x-csrf-token":  self.token},
@@ -34,6 +35,7 @@ class TestUserAuth(BaseCase):
                                              "ошибка")
 
     @allure.description('This test try to auth user')
+    @allure.severity(allure.severity_level.CRITICAL)
     @pytest.mark.parametrize('condition', exclude_params)
     def test_negative_auth_check(self, condition):
         if condition == "no_cookie":

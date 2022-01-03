@@ -8,6 +8,7 @@ from lib.base_case import BaseCase
 @allure.epic('Register cases')
 class TestUserRegister(BaseCase):
     @allure.description('This test trying create_user')
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_create_user_with_existing_email(self):
         email = 'vinkotov@example.com'
         data = {
@@ -23,6 +24,7 @@ class TestUserRegister(BaseCase):
         assert response.content.decode("utf-8") == f"Users with email '{email}' already exists", f"Ошибка {response.content}"
 
     @allure.description('This test trying create_user')
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_create_user_with_incorrect_email(self):
         email = 'vinkotovexample.com'
         data = {
@@ -38,6 +40,7 @@ class TestUserRegister(BaseCase):
         assert response.content.decode(
             "utf-8") == f"Invalid email format", f"Ошибка {response.content}"
 
+    @allure.severity(allure.severity_level.NORMAL)
     @pytest.mark.parametrize(
         'password, username, firstName, lastName, email, statys', [
             [None,'learnqa', 'learnqa', 'learnqa', BaseCase().prepare_registration_data(), "The following required params are missed: password"],
@@ -62,6 +65,7 @@ class TestUserRegister(BaseCase):
             "utf-8") == f"{statys}", f"Ошибка {response.content}"
 
     @allure.description('This test trying create_user')
+    @allure.severity(allure.severity_level.NORMAL)
     def test_create_user_with_name_one_symbol(self):
         email = self.prepare_registration_data()
         data = {
@@ -78,6 +82,7 @@ class TestUserRegister(BaseCase):
             "utf-8") == f"The value of 'firstName' field is too short", f"Ошибка {response.content}"
 
     @allure.description('This test trying create_user')
+    @allure.severity(allure.severity_level.NORMAL)
     def test_create_user_with_name_more_255_symbol(self):
         email = self.prepare_registration_data()
         data = {

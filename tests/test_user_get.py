@@ -6,6 +6,7 @@ from lib.base_case import BaseCase
 
 @allure.epic('Get cases')
 class TestUserGet(BaseCase):
+    @allure.severity(allure.severity_level.NORMAL)
     def test_get_user_details_as_someone_user(self):
         data = {
             'email': 'vinkotov@example.com',
