@@ -7,6 +7,18 @@ from lib.base_case import BaseCase
 
 @allure.epic('Register cases')
 class TestUserRegister(BaseCase):
+    data_with_one_empty_param = [
+        ({'username': 'learnqa', 'firstName': 'learnqa', 'lastName': 'learnqa', 'email': 'vinkotov@example.com'},
+         'password'),
+        ({'password': '123', 'firstName': 'learnqa', 'lastName': 'learnqa', 'email': 'vinkotov@example.com'},
+         'username'),
+        ({'password': '123', 'username': 'learnqa', 'lastName': 'learnqa', 'email': 'vinkotov@example.com'},
+         'firstName'),
+        ({'password': '123', 'username': 'learnqa', 'firstName': 'learnqa', 'email': 'vinkotov@example.com'},
+         'lastName'),
+        ({'password': '123', 'username': 'learnqa', 'firstName': 'learnqa', 'lastName': 'learnqa'}, 'email')
+        ]
+
     @allure.description('This test trying create_user')
     @allure.severity(allure.severity_level.CRITICAL)
     def test_create_user_with_existing_email(self):
@@ -41,28 +53,14 @@ class TestUserRegister(BaseCase):
             "utf-8") == f"Invalid email format", f"Ошибка {response.content}"
 
     @allure.severity(allure.severity_level.NORMAL)
-    @pytest.mark.parametrize(
-        'password, username, firstName, lastName, email, statys', [
-            [None,'learnqa', 'learnqa', 'learnqa', BaseCase().prepare_registration_data(), "The following required params are missed: password"],
-            ['1234',None, 'learnqa', 'learnqa', BaseCase().prepare_registration_data(), "The following required params are missed: username"],
-            ['1234','learnqa', None, 'learnqa', BaseCase().prepare_registration_data(), "The following required params are missed: firstName"],
-            ['1234','learnqa', 'learnqa', None, BaseCase().prepare_registration_data(), "The following required params are missed: lastName"],
-            ['1234','learnqa', 'learnqa', 'learnqa', None, "The following required params are missed: email"],
-        ],
-    )
-    def test_create_user_without_field(self, password, username, firstName, lastName, email, statys):
-        data = {
-            'password': password,
-            'username': username,
-            'firstName': firstName,
-            'lastName': lastName,
-            'email': email
-        }
+    @pytest.mark.parametrize("data", data_with_one_empty_param)
+    def test_create_user_without_field(self, data):
+        data, empty_param = data
 
         response = requests.post("https://playground.learnqa.ru/api/user/", data=data)
         assert response.status_code == 400, f"Ошибка {response.status_code}"
         assert response.content.decode(
-            "utf-8") == f"{statys}", f"Ошибка {response.content}"
+            "utf-8") == f"The following required params are missed: {empty_param}", f"Ошибка {response.content}"
 
     @allure.description('This test trying create_user')
     @allure.severity(allure.severity_level.NORMAL)
