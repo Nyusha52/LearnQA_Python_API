@@ -30,7 +30,7 @@ class TestUserDelete(BaseCase):
         )
 
         # confirm response has expected message
-        expected_message = 'Please, do not delete test users with ID 1-5.'
+        expected_message = 'Please, do not delete test users with ID 1, 2, 3, 4 or 5.'
         Assertions.assert_code_status(response2, 400)
         assert response2.text == expected_message, \
             f"Unexpected response content {response2.text}"
